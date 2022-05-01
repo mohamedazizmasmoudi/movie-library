@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import Header from '../components/Header';
 import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
 
-import { setSelectedMenu, getMoviesDiscover, clearMovies } from '../actions';
+import { setSelectedMenu, getMoviesGenre, clearMovies } from '../actions';
 import MoviesList from '../components/MoviesList';
+import SortBy from '../components/ShortBy';
 import Loader from '../components/Loader';
 
 const Wrapper = styled.div`
@@ -15,31 +16,37 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-// Discover Component
-const Discover = ({
+// Genres Component
+// Gets geral object from State, Match from Router, Action Creators to set Selected menu and Movies from Store
+const Genre = ({
   geral,
   match,
-  location,
   setSelectedMenu,
-  getMoviesDiscover,
+  getMoviesGenre,
   clearMovies,
   movies,
+  location,
 }) => {
+  const [option, setOption] = useState({
+    value: 'popularity.desc',
+    label: 'Popularity',
+  });
   const params = queryString.parse(location.search);
   const { secure_base_url } = geral.base.images;
 
-  // Send url to setSelected Action Creator, it will check if is valid
+  // Send url to setSelected Action Creator, it will check if is valid, and set the header accordingly
   useEffect(() => {
     setSelectedMenu(match.params.name);
     // Clean up to remove selected menu from state
     return () => setSelectedMenu();
   }, [match.params.name]);
 
-  // Call hook to fetch movies discover, pass in the url query
-  useFetchMoviesDiscover(
+  // Call hook to fetch movies of the genre
+  useFetchMoviesGenre(
     match.params.name,
-    getMoviesDiscover,
+    getMoviesGenre,
     params,
+    option,
     clearMovies
   );
 
@@ -48,27 +55,31 @@ const Discover = ({
     return <Loader />;
   }
 
-  // Else return movies list
   return (
     <Wrapper>
-        <meta charSet="utf-8" />
         <title>{`${geral.selected} Movies`}</title>
       <Header title={geral.selected} subtitle="movies" />
+      <SortBy option={option} setOption={setOption} />
       <MoviesList movies={movies} baseUrl={secure_base_url} />
     </Wrapper>
   );
 };
 
 // Hook to fetch the movies, will be called everytime the route or the filters from the state change
-function useFetchMoviesDiscover(name, getMoviesDiscover, params, clearMovies) {
-  const query = name.replace(/\s+/g, '_').toLowerCase();
+function useFetchMoviesGenre(
+  genre,
+  getMoviesGenre,
+  params,
+  option,
+  clearMovies
+) {
   useEffect(() => {
     scroll.scrollToTop({
       smooth: true,
     });
-    getMoviesDiscover(query, params.page);
+    getMoviesGenre(genre, params.page, option.value);
     return () => clearMovies();
-  }, [query, params.page]);
+  }, [genre, params.page, option]);
 }
 
 // Map State to Component Props
@@ -78,5 +89,5 @@ const mapStateToProps = ({ geral, movies }) => {
 
 export default connect(
   mapStateToProps,
-  { setSelectedMenu, getMoviesDiscover, clearMovies }
-)(Discover);
+  { setSelectedMenu, getMoviesGenre, clearMovies }
+)(Genre);

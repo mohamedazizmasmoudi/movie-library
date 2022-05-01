@@ -2,13 +2,11 @@ import * as TYPES from '../actions/types';
 
 export default (state = { loading: true }, action) => {
   switch (action.type) {
-    case TYPES.FETCH_MOVIES_GENRE:
-    case TYPES.FETCH_MOVIES_DISCOVER:
-    case TYPES.FETCH_MOVIES_SEARCH:
+    case TYPES.FETCH_PERSON:
       return { ...state, ...action.payload };
-    case TYPES.FETCH_MOVIES_LOADING:
+    case TYPES.FETCH_PERSON_LOADING:
       return { ...state, loading: true };
-    case TYPES.FETCH_MOVIES_FINISHED:
+    case TYPES.FETCH_PERSON_FINISHED:
       return { ...state, loading: false };
     default:
       return state;
