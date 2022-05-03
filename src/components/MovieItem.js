@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import LazyLoad from 'react-lazyload';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import LazyLoad from "react-lazyload";
+import { connect } from "react-redux";
 
-import NothingSvg from '../svg/nothing.svg';
-import Rating from '../components/Rating';
-import Loading from '../components/Loading';
+import NothingSvg from "../svg/nothing.svg";
+import Rating from "../components/Rating";
+import Loading from "../components/Loading";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const MovieWrapper = styled(Link)`
+import {
+  getPerson,
+  clearPerson,
+  getMoviesforPerson,
+  clearMoviesforPerson,
+  adddeleteFavoriteFilm,
+} from "../actions";
+import Loader from "./Loader";
+const MovieWrapper = styled("div")`
   display: flex;
   flex-direction: column;
   text-decoration: none;
@@ -24,10 +34,14 @@ const MovieWrapper = styled(Link)`
       transform: scaleY(1);
       opacity: 1;
     }
+    .iconheart svg path:hover {
+      stroke: #ffffff;
+      stroke-width: 30;
+    }
   }
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
@@ -43,13 +57,22 @@ const MovieWrapper = styled(Link)`
     transition: all 100ms cubic-bezier(0.215, 0.61, 0.355, 1);
   }
 `;
-
+const IconStyle = styled.div`
+  stroke: #263238;
+  stroke-width: 30;
+  margin-left: 1rem;
+  cursor: pointer;
+  ${MovieWrapper}:hover & {
+    stroke: #ffffff;
+    stroke-width: 30;
+  }
+`;
 const MovieImg = styled.img`
   width: 100%;
   height: 38rem;
-  object-fit: ${props => (props.error ? 'contain' : 'cover')};
+  object-fit: ${(props) => (props.error ? "contain" : "cover")};
   border-radius: 0.8rem;
-  padding: ${props => (props.error ? '2rem' : '')};
+  padding: ${(props) => (props.error ? "2rem" : "")};
   box-shadow: 0rem 2rem 5rem var(--shadow-color);
   transition: all 100ms cubic-bezier(0.645, 0.045, 0.355, 1);
 
@@ -58,7 +81,7 @@ const MovieImg = styled.img`
     box-shadow: none;
   }
 
-  @media ${props => props.theme.mediaQueries.smaller} {
+  @media ${(props) => props.theme.mediaQueries.smaller} {
     height: 28rem;
   }
 `;
@@ -96,7 +119,7 @@ const DetailsWrapper = styled.div`
   align-items: center;
   padding: 1.5rem 3rem;
 
-  @media ${props => props.theme.mediaQueries.smaller} {
+  @media ${(props) => props.theme.mediaQueries.smaller} {
     padding: 1.5rem 1.5rem;
   }
 `;
@@ -132,7 +155,7 @@ const Tooltip = styled.span`
   transition: all 200ms cubic-bezier(0.645, 0.045, 0.355, 1);
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 100%;
     left: 50%;
@@ -150,7 +173,12 @@ const Tooltip = styled.span`
 `;
 
 // Function to render list of movies
-const MovieItem = ({ movie, baseUrl }) => {
+const MovieItem = ({
+  movie,
+  baseUrl,
+  adddeleteFavoriteFilm,
+  person,
+}) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -158,30 +186,78 @@ const MovieItem = ({ movie, baseUrl }) => {
     return () => setLoaded(false);
   }, []);
 
+  const handleClick = async () => {
+    let typeRequest;
+    var arraycontainsturtles = person.favoriteFilm.indexOf(`${movie.id}`) > -1;
+    arraycontainsturtles
+      ? (typeRequest = "removeFavoriteFilm")
+      : (typeRequest = "addFavoriteFilm");
+    adddeleteFavoriteFilm(person, typeRequest, movie);
+  };
+  const fav = () => {
+    if (person.favoriteFilm.length > 0) {
+      var arraycontainsturtles =
+        person.favoriteFilm.indexOf(`${movie.id}`) > -1;
+      return arraycontainsturtles;
+    }
+  };
+  if (person.loading) {
+    return <Loader />;
+  }
   return (
     <LazyLoad height={200} offset={200}>
-      <MovieWrapper to={`${process.env.PUBLIC_URL}/movie/${movie.id}`}>
+      <MovieWrapper>
         {!loaded ? (
           <ImgLoading>
             <Loading />
           </ImgLoading>
         ) : null}
-        <MovieImg
-          error={error ? 1 : 0}
-          onLoad={() => setLoaded(true)}
-          style={!loaded ? { display: 'none' } : {}}
-          src={`${baseUrl}w342${movie.poster_path}`}
-          // If no image, error will occurr, we set error to true
-          // And only change the src to the nothing svg if it isn't already, to avoid infinite callback
-          onError={e => {
-            setError(true);
-            if (e.target.src !== `${NothingSvg}`) {
-              e.target.src = `${NothingSvg}`;
-            }
+        <Link
+          style={{
+            textDecoration: "none",
+            backgroundColor: "transparent",
+            borderRadius: " 0.8rem",
           }}
-        />
+          to={`${process.env.PUBLIC_URL}/movie/${movie.id}`}
+        >
+          <MovieImg
+            error={error ? 1 : 0}
+            onLoad={() => setLoaded(true)}
+            style={!loaded ? { display: "none" } : {}}
+            src={`${baseUrl}w342${movie.poster_path}`}
+            // If no image, error will occurr, we set error to true
+            // And only change the src to the nothing svg if it isn't already, to avoid infinite callback
+            onError={(e) => {
+              setError(true);
+              if (e.target.src !== `${NothingSvg}`) {
+                e.target.src = `${NothingSvg}`;
+              }
+            }}
+          />
+        </Link>
         <DetailsWrapper>
-          <Title>{movie.title}</Title>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Link
+              style={{
+                textDecoration: "none",
+                backgroundColor: "transparent",
+                borderRadius: " 0.8rem",
+              }}
+              to={`${process.env.PUBLIC_URL}/movie/${movie.id}`}
+            >
+              <Title>{movie.title}</Title>
+            </Link>
+            {/* //    font-weight */}
+            <IconStyle onClick={handleClick}>
+              {/* <i class="fas fa-heart"></i> */}
+              <FontAwesomeIcon
+                icon="fas fa-heart"
+                size="2x"
+                color={fav() ? "red" : "transparent"}
+              />
+            </IconStyle>
+          </div>
+
           <RatingsWrapper>
             <Rating number={movie.vote_average / 2} />
             <Tooltip>
@@ -194,4 +270,17 @@ const MovieItem = ({ movie, baseUrl }) => {
   );
 };
 
-export default MovieItem;
+// Get state from store and pass as props to component
+const mapStateToProps = ({ person, geral, moviesPerson }) => ({
+  person,
+  geral,
+  moviesPerson,
+});
+
+export default connect(mapStateToProps, {
+  getPerson,
+  clearPerson,
+  getMoviesforPerson,
+  clearMoviesforPerson,
+  adddeleteFavoriteFilm,
+})(MovieItem);

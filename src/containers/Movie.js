@@ -1,30 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import queryString from 'query-string';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import history from '../history';
-import LazyLoad from 'react-lazyload';
-import ModalVideo from 'react-modal-video';
-import { Element, animateScroll as scroll } from 'react-scroll';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import styled from "styled-components";
+import queryString from "query-string";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import history from "../history";
+import LazyLoad from "react-lazyload";
+import ModalVideo from "react-modal-video";
+import { Element, animateScroll as scroll } from "react-scroll";
 
 import {
   getMovie,
   getRecommendations,
   clearRecommendations,
   clearMovie,
-} from '../actions';
-import Rating from '../components/Rating';
-import NotFound from '../components/NotFound';
-import Header from '../components/Header';
-import Cast from '../components/Cast';
-import Loader from '../components/Loader';
-import MoviesList from '../components/MoviesList';
-import Button from '../components/Button';
-import NothingSvg from '../svg/nothing.svg';
-import Loading from '../components/Loading';
-
+} from "../actions";
+import Rating from "../components/Rating";
+import NotFound from "../components/NotFound";
+import Header from "../components/Header";
+import Cast from "../components/Cast";
+import Loader from "../components/Loader";
+import MoviesList from "../components/MoviesList";
+import Button from "../components/Button";
+import NothingSvg from "../svg/nothing.svg";
+import Loading from "../components/Loading";
+import { adddeleteFavoriteFilm } from "../actions";
 const Wrapper = styled.div`
   display: flex;
   width: 100%;
@@ -151,15 +151,20 @@ const ImageWrapper = styled.div`
 
 const MovieImg = styled.img`
   max-height: 100%;
-  height: ${(props) => (props.error ? '25rem' : 'auto')};
-  object-fit: ${(props) => (props.error ? 'contain' : 'cover')};
-  padding: ${(props) => (props.error ? '2rem' : '')};
+  height: ${(props) => (props.error ? "25rem" : "auto")};
+  object-fit: ${(props) => (props.error ? "contain" : "cover")};
+  padding: ${(props) => (props.error ? "2rem" : "")};
   max-width: 100%;
   border-radius: 0.8rem;
   box-shadow: ${(props) =>
-    props.error ? 'none' : '0rem 2rem 5rem var(--shadow-color-dark)'};
+    props.error ? "none" : "0rem 2rem 5rem var(--shadow-color-dark)"};
 `;
-
+const IconStyle = styled.div`
+  stroke: #263238;
+  stroke-width: 30;
+  margin-left: 1rem;
+  cursor: pointer;
+`;
 const ImgLoading = styled.div`
   width: 100%;
   max-width: 40%;
@@ -268,6 +273,8 @@ const Movie = ({
   recommended,
   getRecommendations,
   clearRecommendations,
+  adddeleteFavoriteFilm,
+  person,
 }) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
@@ -298,12 +305,26 @@ const Movie = ({
   }
 
   if (movie.status_code) {
-    history.push(process.env.PUBLIC_URL + '/404');
+    history.push(process.env.PUBLIC_URL + "/404");
   }
-
+  const handleClick = async () => {
+    let typeRequest;
+    var arraycontainsturtles = person.favoriteFilm.indexOf(`${movie.id}`) > -1;
+    arraycontainsturtles
+      ? (typeRequest = "removeFavoriteFilm")
+      : (typeRequest = "addFavoriteFilm");
+    adddeleteFavoriteFilm(person, typeRequest, movie);
+  };
+  const fav = () => {
+    if (person.favoriteFilm.length > 0) {
+      var arraycontainsturtles =
+        person.favoriteFilm.indexOf(`${movie.id}`) > -1;
+      return arraycontainsturtles;
+    }
+  };
   return (
     <Wrapper>
-        <title>{`${movie.title} - Movie Library`}</title>
+      <title>{`${movie.title} - Movie Library`}</title>
       <LazyLoad height={500}>
         <MovieWrapper>
           {!loaded ? (
@@ -311,7 +332,7 @@ const Movie = ({
               <Loading />
             </ImgLoading>
           ) : null}
-          <ImageWrapper style={!loaded ? { display: 'none' } : {}}>
+          <ImageWrapper style={!loaded ? { display: "none" } : {}}>
             <MovieImg
               error={error ? 1 : 0}
               src={`${secure_base_url}w780${movie.poster_path}`}
@@ -328,7 +349,19 @@ const Movie = ({
           </ImageWrapper>
           <MovieDetails>
             <HeaderWrapper>
-              <Header size="2" title={movie.title} subtitle={movie.tagline} />
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Header size="2" title={movie.title} subtitle={movie.tagline} />
+
+                {/* //    font-weight */}
+                <IconStyle onClick={handleClick}>
+                  {/* <i class="fas fa-heart"></i> */}
+                  <FontAwesomeIcon
+                    icon="fas fa-heart"
+                    size="2x"
+                    color={fav() ? "red" : "transparent"}
+                  />
+                </IconStyle>
+              </div>
             </HeaderWrapper>
             <DetailsWrapper>
               <RatingsWrapper>
@@ -349,7 +382,7 @@ const Movie = ({
             <Text>
               {movie.overview
                 ? movie.overview
-                : 'There is no synopsis available...'}
+                : "There is no synopsis available..."}
             </Text>
             <Heading>The Cast</Heading>
             <Cast cast={movie.cast} baseUrl={secure_base_url} />
@@ -376,7 +409,7 @@ const Movie = ({
 
 //Render the back button if user was pushed into page
 function renderBack() {
-  if (history.action === 'PUSH') {
+  if (history.action === "PUSH") {
     return (
       <div onClick={history.goBack}>
         <Button title="Back" solid left icon="arrow-left" />
@@ -404,7 +437,7 @@ function renderImdb(id) {
   }
   return (
     <AWrapper target="_blank" href={`https://www.imdb.com/title/${id}`}>
-      <Button title="IMDB" icon={['fab', 'imdb']} />
+      <Button title="IMDB" icon={["fab", "imdb"]} />
     </AWrapper>
   );
 }
@@ -415,7 +448,7 @@ function renderTrailer(videos, modalOpened, setmodalOpened) {
     return;
   }
   const { key } = videos.find(
-    (video) => video.type === 'Trailer' && video.site === 'YouTube'
+    (video) => video.type === "Trailer" && video.site === "YouTube"
   );
   return (
     <React.Fragment>
@@ -437,7 +470,7 @@ function splitYear(date) {
   if (!date) {
     return;
   }
-  const [year] = date.split('-');
+  const [year] = date.split("-");
   return year;
 }
 
@@ -450,7 +483,7 @@ function renderInfo(languages, time, data) {
   info.push(time, data);
   return info
     .filter((el) => el !== null)
-    .map((el) => (typeof el === 'number' ? `${el} min.` : el))
+    .map((el) => (typeof el === "number" ? `${el} min.` : el))
     .map((el, i, array) => (i !== array.length - 1 ? `${el} / ` : el));
 }
 
@@ -484,7 +517,7 @@ function renderGenres(genres) {
       <FontAwesomeIcon
         icon="dot-circle"
         size="1x"
-        style={{ marginRight: '5px' }}
+        style={{ marginRight: "5px" }}
       />
       {genre.name}
     </StyledLink>
@@ -492,10 +525,11 @@ function renderGenres(genres) {
 }
 
 // Get state from store and pass as props to component
-const mapStateToProps = ({ movie, geral, recommended }) => ({
+const mapStateToProps = ({ movie, geral, recommended, person }) => ({
   movie,
   geral,
   recommended,
+  person,
 });
 
 export default connect(mapStateToProps, {
@@ -503,4 +537,5 @@ export default connect(mapStateToProps, {
   clearMovie,
   getRecommendations,
   clearRecommendations,
+  adddeleteFavoriteFilm,
 })(Movie);

@@ -404,3 +404,12 @@ form.sign-in-form {
     left: 50%;
   }
 }
+
+.iconheart svg path {
+  stroke: #263238;
+  stroke-width: 30;
+}
+.iconheart svg path:hover {
+  stroke: #ffffff;
+  stroke-width: 30;
+}

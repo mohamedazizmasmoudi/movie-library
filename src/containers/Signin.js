@@ -3,10 +3,10 @@ import "./style.css";
 import regis from "./img/register.svg";
 import log from "./img/log.svg";
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { InputGroupAddon, InputGroupText } from "reactstrap";
-import { toast } from "react-toastify";
+import { connect } from "react-redux";
 
+import { sigin } from "../actions";
 const ShowPassword = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +36,7 @@ const HidePassword = () => (
   </svg>
 );
 //Movie Component
-const Signin = () => {
+const Signin = ({ sigin, person }) => {
   const { register, handleSubmit, errors } = useForm();
   const [type, setType] = useState("password");
   const [typeRequest, setTypeRequest] = useState("signin");
@@ -59,18 +59,7 @@ const Signin = () => {
       });
   }, []);
   const onSubmit = async (data) => {
-    try {
-      const Client = axios.create({ baseURL: "http://localhost:8080/api/" });
-      let res = await Client.post(`${typeRequest}`, data);
-      if (res.data.token) {
-        localStorage.setItem("tokenmovieapp", res.data.token);
-        window.location.href = "/";
-        toast.success("Sigin success!");
-      } else toast.success(res.data.message);
-    } catch (err) {
-      toast.error(err.response.data.error);
-      throw err.response.data;
-    }
+    sigin(data, typeRequest, person);
   };
   const switchPsswType = () => {
     if (type === "password") {
@@ -226,7 +215,7 @@ const Signin = () => {
             <h3>New here ?</h3>
             <p>----------------------------------------------------------</p>
             <button class="btn transparent" id="sign-up-btn">
-              Sign up
+              <h3>Sign up</h3>
             </button>
             <p>----------------------------------------------------------</p>
           </div>
@@ -237,7 +226,7 @@ const Signin = () => {
             <h3>One of us ?</h3>
             <p>----------------------------------------------------------</p>
             <button class="btn transparent" id="sign-in-btn">
-              Sign in
+              <h3>Sign in</h3>
             </button>
             <p>----------------------------------------------------------</p>
           </div>
@@ -247,5 +236,10 @@ const Signin = () => {
     </div>
   );
 };
-
-export default Signin;
+// Get state from store and pass as props to component
+const mapStateToProps = ({ person, geral, moviesPerson }) => ({
+  person,
+  geral,
+  moviesPerson,
+});
+export default connect(mapStateToProps, { sigin })(Signin);

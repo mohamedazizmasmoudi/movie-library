@@ -224,7 +224,7 @@ const Person = ({
       smooth: true,
       delay: 500,
     });
-    getPerson(match.params.id);
+    getPerson(match.params.id,person);
     return () => clearPerson();
   }, [match.params.id]);
 

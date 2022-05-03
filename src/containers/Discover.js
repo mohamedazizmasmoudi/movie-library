@@ -5,7 +5,7 @@ import Header from '../components/Header';
 import styled from 'styled-components';
 import { animateScroll as scroll } from 'react-scroll';
 
-import { setSelectedMenu, getMoviesDiscover, clearMovies } from '../actions';
+import { setSelectedMenu, getMoviesDiscover, clearMovies, getFavoriteFilm } from '../actions';
 import MoviesList from '../components/MoviesList';
 import Loader from '../components/Loader';
 
@@ -24,6 +24,8 @@ const Discover = ({
   getMoviesDiscover,
   clearMovies,
   movies,
+  person,
+  getFavoriteFilm
 }) => {
   const params = queryString.parse(location.search);
   const { secure_base_url } = geral.base.images;
@@ -40,14 +42,18 @@ const Discover = ({
     match.params.name,
     getMoviesDiscover,
     params,
-    clearMovies
+    clearMovies,
+    person,
+    getFavoriteFilm
   );
 
   // If loading
   if (movies.loading) {
     return <Loader />;
   }
-
+  if (person.loading) {
+    return <Loader />;
+  }
   // Else return movies list
   return (
     <Wrapper>
@@ -60,23 +66,25 @@ const Discover = ({
 };
 
 // Hook to fetch the movies, will be called everytime the route or the filters from the state change
-function useFetchMoviesDiscover(name, getMoviesDiscover, params, clearMovies) {
+function useFetchMoviesDiscover(name, getMoviesDiscover, params, clearMovies, person,
+  getFavoriteFilm) {
   const query = name.replace(/\s+/g, '_').toLowerCase();
   useEffect(() => {
     scroll.scrollToTop({
       smooth: true,
     });
     getMoviesDiscover(query, params.page);
+    getFavoriteFilm(person)
     return () => clearMovies();
   }, [query, params.page]);
 }
 
 // Map State to Component Props
-const mapStateToProps = ({ geral, movies }) => {
-  return { geral, movies };
+const mapStateToProps = ({ geral, movies, person }) => {
+  return { geral, movies, person };
 };
 
 export default connect(
   mapStateToProps,
-  { setSelectedMenu, getMoviesDiscover, clearMovies }
+  { setSelectedMenu, getMoviesDiscover, clearMovies, getFavoriteFilm }
 )(Discover);
