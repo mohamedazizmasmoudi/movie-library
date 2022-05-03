@@ -48,6 +48,7 @@ const Sidebar = ({ genres, staticCategories, selected }) => {
         <Logo />
         <Heading>Discover</Heading>
         {renderStatic(staticCategories, selected)}
+        {renderStatic2(staticCategories, selected)}
         <Heading>Genres</Heading>
         {renderGenres(genres, selected)}
 
@@ -76,7 +77,21 @@ function renderStatic(categories, selected, setisOpened) {
     </LinkWrap>
   ));
 }
-
+function renderStatic2(categories, selected, setisOpened) {
+  return (
+    <LinkWrap
+      to={`${process.env.PUBLIC_URL}/favorite`}
+      key={999}
+      onClick={setisOpened ? () => setisOpened(false) : null}
+    >
+      <MenuItem
+        mobile={setisOpened ? 1 : 0}
+        title={"Favorite"}
+        selected={"favorite" === selected ? true : false}
+      />
+    </LinkWrap>)
+  // ));
+}
 function renderGenres(genres, selected, setisOpened) {
   return genres.map(genre => (
     <LinkWrap

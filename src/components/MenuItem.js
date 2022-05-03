@@ -1,6 +1,6 @@
-import React from 'react';
-import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import styled from "styled-components";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const StyledItem = styled.div`
   width: 100%;
@@ -10,25 +10,26 @@ const StyledItem = styled.div`
   font-size: 1.2rem;
   font-weight: 600;
   line-height: 1;
-  opacity: ${props => (props.selected ? '1' : '.6')};
-  color: ${props => {
+  opacity: ${(props) => (props.selected ? "1" : ".6")};
+  color: ${(props) => {
     if (props.mobile) {
       if (props.selected) {
-        return 'var(--text-color)';
+        return "var(--text-color)";
       }
-      return 'rgba(255, 255, 255, .7)';
+      return "rgba(255, 255, 255, .7)";
     } else {
       if (props.selected) {
-        return 'var(--color-primary-dark)';
+        return "var(--color-primary-dark)";
       }
-      return 'var(--color-primary-light)';
+      return "var(--color-primary-light)";
     }
   }};
-  border-color: ${props =>
+  border-color: ${(props) =>
     props.selected
-      ? 'var(--color-primary-dark)'
-      : 'var(--color-primary-light)'};
-  border: ${props => (props.selected ? '1px solid' : '1px solid transparent')};
+      ? "var(--color-primary-dark)"
+      : "var(--color-primary-light)"};
+  border: ${(props) =>
+    props.selected ? "1px solid" : "1px solid transparent"};
   border-radius: 2rem;
   text-decoration: none;
   cursor: pointer;
@@ -45,14 +46,16 @@ const StyledItem = styled.div`
 
 function renderIcon(title) {
   switch (title) {
-    case 'Popular':
-      return 'heart';
-    case 'Top Rated':
-      return 'poll';
-    case 'Upcoming':
-      return 'calendar';
+    case "Popular":
+      return "heart";
+    case "Top Rated":
+      return "poll";
+    case "Upcoming":
+      return "calendar";
+    case "Favorite":
+      return "fas fa-heart";
     default:
-      return 'dot-circle';
+      return "dot-circle";
   }
 }
 
@@ -62,7 +65,7 @@ const MenuItem = ({ title, selected, mobile }) => {
       <FontAwesomeIcon
         icon={renderIcon(title)}
         size="1x"
-        style={{ marginRight: '10px' }}
+        style={{ marginRight: "10px" }}
       />
       {title}
     </StyledItem>

@@ -7,6 +7,7 @@ import { init } from "../actions";
 import Sidebar from "./Sidebar";
 import MenuMobile from "./MenuMobile";
 import Discover from "./Discover";
+import Favorite from "./Favorite";
 import Genre from "./Genre";
 import Search from "./Search";
 import Movie from "./Movie";
@@ -164,6 +165,11 @@ const App = ({ init, isLoading }) => {
                     path={process.env.PUBLIC_URL + "/discover/:name"}
                     exact
                     component={Discover}
+                  />
+                  <Route
+                    path={process.env.PUBLIC_URL + "/favorite"}
+                    exact
+                    component={Favorite}
                   />
                   <Route
                     path={process.env.PUBLIC_URL + "/search/:query"}

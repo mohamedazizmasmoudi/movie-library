@@ -173,12 +173,7 @@ const Tooltip = styled.span`
 `;
 
 // Function to render list of movies
-const MovieItem = ({
-  movie,
-  baseUrl,
-  adddeleteFavoriteFilm,
-  person,
-}) => {
+const MovieItem = ({ movie, baseUrl, adddeleteFavoriteFilm, person }) => {
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState(false);
 
@@ -248,14 +243,16 @@ const MovieItem = ({
               <Title>{movie.title}</Title>
             </Link>
             {/* //    font-weight */}
-            <IconStyle onClick={handleClick}>
-              {/* <i class="fas fa-heart"></i> */}
-              <FontAwesomeIcon
-                icon="fas fa-heart"
-                size="2x"
-                color={fav() ? "red" : "transparent"}
-              />
-            </IconStyle>
+            {window.location.pathname !== "/favorite" && (
+              <IconStyle onClick={handleClick}>
+                {/* <i class="fas fa-heart"></i> */}
+                <FontAwesomeIcon
+                  icon="fas fa-heart"
+                  size="2x"
+                  color={fav() ? "red" : "transparent"}
+                />
+              </IconStyle>
+            )}
           </div>
 
           <RatingsWrapper>

@@ -225,6 +225,32 @@ export const getMovie = (id) => async (dispatch) => {
     history.push(process.env.PUBLIC_URL + "/error");
   }
 };
+// Get single movie
+export const getFavoriteFilmData = (person) => async (dispatch) => {
+  try {
+    dispatch({ type: TYPES.FETCH_MOVIES_LOADING });
+    let movies = []
+    for (let index = 0; index < person.favoriteFilm.length; index++) {
+      const element = person.favoriteFilm[index];
+      const res = await tmdbAPI.get(`/movie/${element}`, {
+        params: {
+          append_to_response: "videos",
+        },
+      });
+      movies.push(res.data)
+    }
+    await dispatch({
+      type: TYPES.FETCH_MOVIES_GENRE,
+      payload: {results:movies,page : 1 ,total_results:movies.length,total_pages:Math.ceil(movies.length/20)},
+    });
+    dispatch({ type: TYPES.FETCH_MOVIES_FINISHED });
+  } catch (err) {
+    dispatch({ type: TYPES.INSERT_ERROR, payload: err.response });
+    history.push(process.env.PUBLIC_URL + "/error");
+  }
+};
+
+
 
 // Set loading to true for next render
 export const clearMovie = () => {

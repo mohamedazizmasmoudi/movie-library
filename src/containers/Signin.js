@@ -117,7 +117,7 @@ const Signin = ({ sigin, person }) => {
                 )}{" "}
                 Login
               </button>
-              <p class="social-text">Or Sign in with social platforms</p>
+              {/* <p class="social-text">Or Sign in with social platforms</p>
               <div class="social-media">
                 <a href="/" className="social-icon">
                   <i class="fab fa-facebook-f"></i>
@@ -131,7 +131,7 @@ const Signin = ({ sigin, person }) => {
                 <a href="/" class="social-icon">
                   <i class="fab fa-linkedin-in"></i>
                 </a>
-              </div>
+              </div> */}
             </form>
           )}
           {typeRequest === "signup" && (
@@ -189,7 +189,7 @@ const Signin = ({ sigin, person }) => {
                 )}{" "}
                 Sign up
               </button>
-              <p class="social-text">Or Sign in with social platforms</p>
+              {/* <p class="social-text">Or Sign in with social platforms</p>
               <div class="social-media">
                 <a href="/" className="social-icon">
                   <i class="fab fa-facebook-f"></i>
@@ -203,7 +203,7 @@ const Signin = ({ sigin, person }) => {
                 <a href="/" class="social-icon">
                   <i class="fab fa-linkedin-in"></i>
                 </a>
-              </div>
+              </div> */}
             </form>
           )}
         </div>
