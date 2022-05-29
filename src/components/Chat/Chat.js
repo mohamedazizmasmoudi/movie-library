@@ -14,7 +14,7 @@ const ENDPOINT = process.env.REACT_APP_SOCKET_URL;
 
 let socket;
 
-const Chat = ({ location, gContext, displaychat,person }) => {
+const Chat = ({ location, isMobile, displaychat,person }) => {
   const [id, setID] = useState('');
   console.log('person',person.userData)
   const [message, setMessage] = useState('');
@@ -114,7 +114,7 @@ const Chat = ({ location, gContext, displaychat,person }) => {
         <div
           style={{
             position: 'fixed',
-            left: '72%',
+            left: isMobile?'45%':'72%',
             bottom: '4.5rem',
             zIndex: 99999999,
             background: 'white',

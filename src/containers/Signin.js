@@ -46,14 +46,14 @@ const Signin = ({ sigin, person }) => {
 
     sign_up_btn &&
       sign_up_btn.addEventListener("click", () => {
-        const container = document.querySelector(".container");
+        const container = document.querySelector(".containersigin");
         container.classList.add("sign-up-mode");
         setTypeRequest("signup");
       });
 
     sign_in_btn &&
       sign_in_btn.addEventListener("click", () => {
-        const container = document.querySelector(".container");
+        const container = document.querySelector(".containersigin");
         setTypeRequest("signin");
         container.classList.remove("sign-up-mode");
       });
@@ -69,7 +69,7 @@ const Signin = ({ sigin, person }) => {
     }
   };
   return (
-    <div class="container">
+    <div class="containersigin">
       <div class="forms-container">
         <div class="signin-signup">
           {typeRequest === "signin" && (

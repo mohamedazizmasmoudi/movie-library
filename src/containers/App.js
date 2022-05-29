@@ -219,7 +219,7 @@ const App = ({ init, isLoading }) => {
                 <button
         style={{
           position: 'fixed',
-          left: '96%',
+          left: isMobile?'92%':'96%',
           bottom: '1.5rem',
           zIndex: 99999999,
           background: 'white',
@@ -244,6 +244,7 @@ const App = ({ init, isLoading }) => {
       <Chat
 
             displaychat={displaychat}
+            isMobile={isMobile}
           />
       </React.Fragment>
     </Router>
