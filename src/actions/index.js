@@ -44,9 +44,10 @@ export const getFavoriteFilm = (person) => async (dispatch) => {
     const token = localStorage.getItem("tokenmovieapp");
     dispatch({ type: TYPES.FETCH_PERSON_LOADING });
     let res = await Client.get(`getFavoriteFilm`, config(token));
+    console.log('res.data',res.data)
     await dispatch({
       type: TYPES.FETCH_PERSON,
-      payload: { ...person, favoriteFilm: res.data },
+      payload: { ...person,  favoriteFilm: res.data.favoriteFilm,userData: res.data },
     });
     dispatch({ type: TYPES.FETCH_PERSON_FINISHED });
   } catch (err) {

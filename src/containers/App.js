@@ -17,7 +17,9 @@ import Signin from "./Signin";
 import NotFound from "../components/NotFound";
 import SearchBar from "../components/SearchBar";
 import Loader from "../components/Loader";
-
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
+import Close from '@material-ui/icons/Close';
+import Chat from "../components/Chat/Chat"
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import {
@@ -97,7 +99,7 @@ const App = ({ init, isLoading }) => {
   }, []);
   const [isMobile, setisMobile] = useState(null);
   const [isAuth, setisAuth] = useState(null);
-
+  const [displaychat, setdisplaychat] = useState(null)
   // Set amount of items to show on slider based on the width of the element
   const changeMobile = () => {
     window.matchMedia("(max-width: 80em)").matches
@@ -212,6 +214,34 @@ const App = ({ init, isLoading }) => {
             </>
           )}
         </MainWrapper>
+                <button
+        style={{
+          position: 'fixed',
+          left: '96%',
+          bottom: '1.5rem',
+          zIndex: 99999999,
+          background: 'white',
+          borderRadius: '50%',
+          outline: 'none',
+          padding: 12,
+        }}
+        type="button"
+        onClick={() => {
+          setdisplaychat(!displaychat);
+        }}
+      >
+        {displaychat?
+                <Close style={{ color: 'black',height:"1.5em", width:"1.5em" }}  />
+
+        :
+        
+        <QuestionAnswerIcon style={{ color: 'black',height:"1.5em", width:"1.5em" }}  />
+        }
+      </button>
+      <Chat
+
+            displaychat={displaychat}
+          />
       </React.Fragment>
     </Router>
   );
