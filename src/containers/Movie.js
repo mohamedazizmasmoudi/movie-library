@@ -330,7 +330,7 @@ const Movie = ({
     adddeleteFavoriteFilm(person, typeRequest, movie);
   };
   const fav = () => {
-    if (person.favoriteFilm.length > 0) {
+    if (person.favoriteFilm && person.favoriteFilm.length > 0) {
       var arraycontainsturtles =
         person.favoriteFilm.indexOf(`${movie.id}`) > -1;
       return arraycontainsturtles;

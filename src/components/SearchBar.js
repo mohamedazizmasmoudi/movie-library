@@ -156,6 +156,7 @@ const SearchBar = () => {
               localStorage.setItem("dark", true);
               document.getElementsByTagName("body")[0].style.backgroundColor =
                 "#071b20";
+                if(document.getElementById("ratingTowhite"))
                 document.getElementById("ratingTowhite").style.color = "#b0bec5";
                 if(document.getElementById("heartTowhite"))
                 document.getElementById("heartTowhite").style.stroke = "#b0bec5"
@@ -163,6 +164,7 @@ const SearchBar = () => {
               localStorage.setItem("dark", false);
               document.getElementsByTagName("body")[0].style.backgroundColor =
                 "white";
+                if(document.getElementById("ratingTowhite"))
                 document.getElementById("ratingTowhite").style.color = "black";
                 if(document.getElementById("heartTowhite"))
                 document.getElementById("heartTowhite").style.stroke = "#263238"
