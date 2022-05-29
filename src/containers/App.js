@@ -119,6 +119,7 @@ const App = ({ init, isLoading }) => {
   }, []);
   useEffect(() => {
     isAuthfct();
+    localStorage.setItem("dark", false)
   }, []);
   return isLoading ? (
     <ContentWrapper>

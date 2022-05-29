@@ -19,6 +19,7 @@ const Chat = ({ location, gContext, displaychat,person }) => {
   console.log('person',person.userData)
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
+  const [first,setFirst] = useState(false)
   useEffect(() => {
     socket = io(ENDPOINT);
 
@@ -72,10 +73,14 @@ const Chat = ({ location, gContext, displaychat,person }) => {
   }, [person]);
 
   useEffect(() => {
-    socket.on('message', (msg) => {
-      console.log('msg',msg)
-      setMessages((msgs) => [...msgs, msg]);
-    });
+    if(!first){
+      console.log('socket',socket)
+      socket.on('message', (msg) => {
+        console.log('msg',msg)
+        setMessages((msgs) => [...msgs, msg]);
+        setFirst(true)
+      });
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displaychat]);
 

@@ -281,7 +281,21 @@ const Movie = ({
   const [modalOpened, setmodalOpened] = useState(false);
   const { secure_base_url } = geral.base.images;
   const params = queryString.parse(location.search);
+  useEffect(()=>{
+    console.log('here',localStorage.getItem("dark"))
+    if (localStorage.getItem("dark") === "false") {
+        if(document.getElementById("ratingTowhite"))
+        document.getElementById("ratingTowhite").style.color = "#b0bec5";
+        if(document.getElementById("heartTowhite"))
+        document.getElementById("heartTowhite").style.stroke = "#b0bec5"
+    } else {
+        if(document.getElementById("ratingTowhite"))
+        document.getElementById("ratingTowhite").style.color = "black";
+        if(document.getElementById("heartTowhite"))
+        document.getElementById("heartTowhite").style.stroke = "#263238"
 
+    }
+  },[document])
   // Fetch movie id when id on the url changes
   useEffect(() => {
     scroll.scrollToTop({
@@ -356,6 +370,7 @@ const Movie = ({
                 <IconStyle onClick={handleClick}>
                   {/* <i class="fas fa-heart"></i> */}
                   <FontAwesomeIcon
+                  id="heartTowhite"
                     icon="fas fa-heart"
                     size="2x"
                     color={fav() ? "red" : "transparent"}

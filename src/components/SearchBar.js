@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import logout from "../svg/logout.png";
 const Img = styled.img`
   width: 3rem;
-  margin: 0px 2rem 0px 2rem;
+  margin: 0px 1rem 0px 1rem;
 `;
 const Form = styled.form`
   position: relative;
@@ -90,10 +90,12 @@ const Button = styled.button`
 `;
 const Button2 = styled.button`
   line-height: 1;
-  background-color: transparent;
-  border: none;
+  background-color: white;
+  border-radius: 50%;
+  padding: 12;
   outline: none;
   color: var(--text-color);
+  margin-left : 10px;
 
   @media ${(props) => props.theme.mediaQueries.large} {
     color: var(--text-color);
@@ -145,6 +147,31 @@ const SearchBar = () => {
   }
   return (
     <div style={{ display: "flex" }}>
+      <div style={{marginRight:"10px"}}>
+        <input
+          type="checkbox"
+          id="toogle"
+          onClick={() => {
+            if (localStorage.getItem("dark") === "false") {
+              localStorage.setItem("dark", true);
+              document.getElementsByTagName("body")[0].style.backgroundColor =
+                "#071b20";
+                document.getElementById("ratingTowhite").style.color = "#b0bec5";
+                if(document.getElementById("heartTowhite"))
+                document.getElementById("heartTowhite").style.stroke = "#b0bec5"
+            } else {
+              localStorage.setItem("dark", false);
+              document.getElementsByTagName("body")[0].style.backgroundColor =
+                "white";
+                document.getElementById("ratingTowhite").style.color = "black";
+                if(document.getElementById("heartTowhite"))
+                document.getElementById("heartTowhite").style.stroke = "#263238"
+
+            }
+          }}
+        />
+        <label for="toogle" class="toogle-button"></label>
+      </div>
       <Form
         state={state}
         onClick={() => {
@@ -166,7 +193,7 @@ const SearchBar = () => {
         />
       </Form>
       <Button2 type="submit" state={state} onClick={handleLogout}>
-        <Img src={logout} class="image" alt="" />
+        <Img style={{ color: 'black',height:"1.5em", width:"1.5em" }} src={logout} class="image" alt="" />
       </Button2>{" "}
     </div>
   );
