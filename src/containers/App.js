@@ -215,6 +215,7 @@ const App = ({ init, isLoading }) => {
             </>
           )}
         </MainWrapper>
+        {isAuth && 
                 <button
         style={{
           position: 'fixed',
@@ -239,6 +240,7 @@ const App = ({ init, isLoading }) => {
         <QuestionAnswerIcon style={{ color: 'black',height:"1.5em", width:"1.5em" }}  />
         }
       </button>
+      }
       <Chat
 
             displaychat={displaychat}
