@@ -44,7 +44,7 @@
   },
    "devDependencies": {
     "node-sass": "^4.13.0"
-  }
+  },
   "scripts": {
     "dev": "react-scripts start",
     "build": "react-scripts build",
