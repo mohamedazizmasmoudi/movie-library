@@ -282,7 +282,6 @@ const Movie = ({
   const { secure_base_url } = geral.base.images;
   const params = queryString.parse(location.search);
   useEffect(()=>{
-    console.log('here',localStorage.getItem("dark"))
     if (localStorage.getItem("dark") === "false") {
         if(document.getElementById("ratingTowhite"))
         document.getElementById("ratingTowhite").style.color = "#b0bec5";

@@ -8,7 +8,6 @@ import './Messages.css';
 
 const Messages = ({ messages, id }) => (
   <ScrollToBottom className="messages">
-    {console.log('messages',messages)}
     {messages.map((message, i) => (
       <div key={i}>
         <Message message={message} id={id} />

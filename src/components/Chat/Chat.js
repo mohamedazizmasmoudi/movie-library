@@ -16,7 +16,6 @@ let socket;
 
 const Chat = ({ location, isMobile, displaychat,person }) => {
   const [id, setID] = useState('');
-  console.log('person',person.userData)
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [first,setFirst] = useState(false)
@@ -39,7 +38,6 @@ const Chat = ({ location, isMobile, displaychat,person }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [displaychat]);
   useEffect(() => {
-    console.log('person.userData',person.userData)
     if(person.userData){
       
       socket = io(ENDPOINT);
@@ -74,9 +72,7 @@ const Chat = ({ location, isMobile, displaychat,person }) => {
 
   useEffect(() => {
     if(!first){
-      console.log('socket',socket)
       socket.on('message', (msg) => {
-        console.log('msg',msg)
         setMessages((msgs) => [...msgs, msg]);
         setFirst(true)
       });

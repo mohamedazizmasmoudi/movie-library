@@ -91,7 +91,7 @@ const Favorite = ({
       <meta charSet="utf-8" />
       <title>{`Favorite Movies`}</title>
       <Header title={`Favorite Movies`} subtitle="movies" />
-      {movies.length > 0 ? (
+      {movies.results.length > 0 ? (
         <MoviesList movies={movies} baseUrl={secure_base_url} />
       ) : (
         <NoMoviesList>
