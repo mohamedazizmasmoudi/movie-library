@@ -13,7 +13,7 @@ export const init = () => async (dispatch) => {
 export const sigin = (data, typeRequest, person) => async (dispatch) => {
   // const onSubmit = async (data) => {
   try {
-    const Client = axios.create({ baseURL: "https://movieappapibackend.herokuapp.com/api/" });
+    const Client = axios.create({ baseURL: "http://localhost:8080/api/" });
     dispatch({ type: TYPES.FETCH_PERSON_LOADING });
     let res = await Client.post(`${typeRequest}`, data);
     if (res.data.token) {
@@ -40,7 +40,7 @@ const config = (token) => {
 };
 export const getFavoriteFilm = (person) => async (dispatch) => {
   try {
-    const Client = axios.create({ baseURL: "https://movieappapibackend.herokuapp.com/api/user/" });
+    const Client = axios.create({ baseURL: "http://localhost:8080/api/user/" });
     const token = localStorage.getItem("tokenmovieapp");
     dispatch({ type: TYPES.FETCH_PERSON_LOADING });
     let res = await Client.get(`getFavoriteFilm`, config(token));
@@ -59,7 +59,7 @@ export const adddeleteFavoriteFilm = (person, typeRequest, movie) => async (
   dispatch
 ) => {
   try {
-    const Client = axios.create({ baseURL: "https://movieappapibackend.herokuapp.com/api/user/" });
+    const Client = axios.create({ baseURL: "http://localhost:8080/api/user/" });
     const token = localStorage.getItem("tokenmovieapp");
 
     // dispatch({ type: TYPES.FETCH_PERSON_LOADING });
