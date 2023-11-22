@@ -19,7 +19,6 @@ const FontAwesome = styled(FontAwesomeIcon)`
 
 const Rating = ({ number }) => {
   useEffect(()=>{
-    console.log(document.getElementById("ratingTowhite"))
     if (localStorage.getItem("dark") === "false") {
       if(document.getElementById("ratingTowhite"))
       document.getElementById("ratingTowhite").style.color = "#b0bec5";

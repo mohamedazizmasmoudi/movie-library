@@ -282,7 +282,6 @@ const Movie = ({
   const { secure_base_url } = geral.base.images;
   const params = queryString.parse(location.search);
   useEffect(()=>{
-    console.log('here',localStorage.getItem("dark"))
     if (localStorage.getItem("dark") === "false") {
         if(document.getElementById("ratingTowhite"))
         document.getElementById("ratingTowhite").style.color = "#b0bec5";
@@ -330,7 +329,7 @@ const Movie = ({
     adddeleteFavoriteFilm(person, typeRequest, movie);
   };
   const fav = () => {
-    if (person.favoriteFilm.length > 0) {
+    if (person.favoriteFilm && person.favoriteFilm.length > 0) {
       var arraycontainsturtles =
         person.favoriteFilm.indexOf(`${movie.id}`) > -1;
       return arraycontainsturtles;
